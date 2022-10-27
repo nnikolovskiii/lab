@@ -34,8 +34,15 @@ public class StudentEnrollmentSummary extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+
         long courseId = (long) req.getSession().getAttribute("chosenCourse");
 
+        //if there is no student selected we want to redirect to /AddStudent
+        if (req.getParameter("student") == null){
+            resp.sendRedirect("/AddStudent?courseId="+courseId);
+            return;
+        }
         //get the Student username from the form
         String studentUsername = req.getParameter("student");
 

@@ -27,6 +27,8 @@ public class CourseRepository {
         return findById(courseId).getStudents();
     }
     public Course addStudentToCourse(Student student, Course course){
+        //remove with the same username in order to have no duplicates
+        course.getStudents().removeIf(s->s.getUsername().equals(student.getUsername()));
         course.getStudents().add(student);
         return course;
     }

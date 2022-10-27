@@ -8,6 +8,7 @@ import java.util.List;
 public interface CourseService {
     List<Student> listStudentsByCourse(Long courseId);
     Course addStudentInCourse(String username, Long courseId);
+    //extra functions
     List<Course> listAll();
     Course getCourse(Long courseId);
 }

@@ -37,8 +37,7 @@
 
     <form th:action="@{/StudentEnrollmentSummary}" th:method="POST">
         <div th:each="student: ${students}"><input type="radio" name="student" th:value="${student.getUsername()}"
-                                                   th:text="${student.getName()}"/>
-            <th:block th:text="${student.getSurname()}"/></div>
+                                                   th:text="${student.getUsername()}"/></div>
         <input type='submit' value='Submit'/>
     </form>
 
