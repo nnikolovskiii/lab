@@ -24,7 +24,7 @@ public class MyFilter implements Filter {
 
         String path = request.getServletPath();
 
-        if (!"/courses".equals(path) && !"/main.css".equals(path) && course==null) {
+        if (!"/AddStudent".equals(path) &&!"/courses".equals(path) && !"/main.css".equals(path) && course==null) {
             response.sendRedirect("/courses?error=CourseNotSelected");
         } else {
             filterChain.doFilter(servletRequest,servletResponse);

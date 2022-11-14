@@ -1,9 +1,12 @@
 package mk.ukim.finki.wp.lab.web.controller;
 
+import mk.ukim.finki.wp.lab.model.Course;
 import mk.ukim.finki.wp.lab.service.CourseService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 @RequestMapping(value = {"/", "/courses"})
@@ -21,7 +24,7 @@ public class CourseController {
             model.addAttribute("error", error);
         }
 
-
+        List<Course> courses = courseService.listAll();
         model.addAttribute("courses", courseService.listAll());
         return "listCourses";
     }

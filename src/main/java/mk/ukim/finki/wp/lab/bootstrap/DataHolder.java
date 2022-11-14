@@ -3,12 +3,14 @@ package mk.ukim.finki.wp.lab.bootstrap;
 import mk.ukim.finki.wp.lab.model.Course;
 import mk.ukim.finki.wp.lab.model.Student;
 import mk.ukim.finki.wp.lab.model.Teacher;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 public class DataHolder {
     public static List<Course> courses;
     public static List<Student> students;
@@ -22,7 +24,7 @@ public class DataHolder {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file)))) {
             reader.lines().forEach(str->{
                 String[] split = str.split("\\s+");
-                courses.add(new Course(Long.parseLong(split[0]), split[1], split[2]));
+                courses.add(new Course(split[0], split[1]));
             });
         } catch (FileNotFoundException e) {
             e.printStackTrace();

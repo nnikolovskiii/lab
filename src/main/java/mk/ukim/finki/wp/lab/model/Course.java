@@ -17,6 +17,7 @@ public class Course {
 
     public Course(){
         this.courseId = (long) (Math.random() * 1000);
+        students = new ArrayList<>();
     }
 
     public Course(String name, String description) {
@@ -25,20 +26,16 @@ public class Course {
         this.name = name;
         this.description = description;
         //init array
-        students = new ArrayList<>();
     }
 
-    public Course(String name, String description, List<Student> students) {
-        this();
-        this.name = name;
-        this.description = description;
-        this.students = students;
-    }
 
     public Course(String name, String description, Teacher teacher) {
         this();
         this.name = name;
         this.description = description;
         this.teacher = teacher;
+    }
+
+    public Course(long parseLong, String description) {
     }
 }

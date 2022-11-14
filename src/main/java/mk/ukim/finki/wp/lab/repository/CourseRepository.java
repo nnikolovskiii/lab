@@ -37,7 +37,7 @@ public class CourseRepository {
     public Course save(String name, String description, Teacher teacher) {
         Course course = new Course(name, description, teacher);
         //remove duplicate
-        DataHolder.courses.removeIf(c -> c.getName().equals(name));
+        DataHolder.courses.removeIf(c -> c.getName().equals(name) && c.getTeacher().getId().equals(teacher.getId()));
         DataHolder.courses.add(course);
         return course;
     }
