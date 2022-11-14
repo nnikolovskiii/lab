@@ -15,19 +15,30 @@ public class Course {
     private List<Student> students;
     private Teacher teacher;
 
-    public Course(Long courseId, String name, String description) {
-        this.id = (long) (Math.random() * 1000);
-        this.courseId = courseId;
+    public Course(){
+        this.courseId = (long) (Math.random() * 1000);
+    }
+
+    public Course(String name, String description) {
+        //se povikuva prazniot konstruktor
+        this();
         this.name = name;
         this.description = description;
         //init array
         students = new ArrayList<>();
     }
 
-    public Course(Long courseId, String name, String description, List<Student> students) {
-        this.courseId = courseId;
+    public Course(String name, String description, List<Student> students) {
+        this();
         this.name = name;
         this.description = description;
         this.students = students;
+    }
+
+    public Course(String name, String description, Teacher teacher) {
+        this();
+        this.name = name;
+        this.description = description;
+        this.teacher = teacher;
     }
 }

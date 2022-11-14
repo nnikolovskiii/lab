@@ -3,9 +3,7 @@ package mk.ukim.finki.wp.lab.web.controller;
 import mk.ukim.finki.wp.lab.service.CourseService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping(value = {"/", "/courses"})
@@ -26,5 +24,24 @@ public class CourseController {
 
         model.addAttribute("courses", courseService.listAll());
         return "listCourses";
+    }
+
+    //името, описот за курсот, како и id на професорот кој е одговорен за тој курс
+    @PostMapping
+    public String saveCourse(@RequestParam String name,
+                             @RequestParam String description,
+                             @RequestParam Long id){
+        try {
+            courseService.saveCourse(name, description, id);
+        }catch (RuntimeException exception){
+            return "redirect:/courses?error=" + exception.getMessage();
+        }
+        return "redirect:/courses";
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public String deleteCourse(@PathVariable Long id){
+        this.courseService.deleteById(id);
+        return "redirect:/courses";
     }
 }
