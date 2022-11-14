@@ -35,7 +35,7 @@ public class StudentServiceImpl implements StudentService {
         if (username==null || username.isEmpty()) {
             throw new IllegalArgumentException();
         }
-        Student student = new Student(username, password, name, surname);
+        Student student = new Student(username, password, name, surname, true);
         studentRepository.save(student);
         return student;
     }

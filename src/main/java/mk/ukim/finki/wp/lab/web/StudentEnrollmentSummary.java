@@ -14,6 +14,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+//site novi studenti sto se dodavaat
+
 @WebServlet(urlPatterns = "/StudentEnrollmentSummary")
 public class StudentEnrollmentSummary extends HttpServlet {
     //why final?

@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head >
+    <meta charset="UTF-8">
+    <title>New Student</title>
+</head>
+<body>
+<ul>
+    <li th:each="student: ${students}">
+        <th:block th:text="${student.getName()}"/>
+        <th:block th:text="${student.getSurname()}"/>
+    </li>
+</ul>
+</body>
+</html>

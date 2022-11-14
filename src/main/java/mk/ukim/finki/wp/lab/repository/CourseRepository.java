@@ -1,6 +1,6 @@
 package mk.ukim.finki.wp.lab.repository;
 
-import mk.ukim.finki.wp.lab.bootstrap.CourseDataHolder;
+import mk.ukim.finki.wp.lab.bootstrap.DataHolder;
 import mk.ukim.finki.wp.lab.model.Course;
 import mk.ukim.finki.wp.lab.model.Student;
 import org.springframework.stereotype.Repository;
@@ -13,12 +13,12 @@ import java.util.Optional;
 public class CourseRepository {
 
     public List<Course> findAllCourses(){
-        return CourseDataHolder.courses;
+        return DataHolder.courses;
     }
     public Course findById(Long courseId) throws  NoSuchElementException{
         //null potential error
         //throw exception
-        Optional<Course> first = CourseDataHolder.courses.stream().filter(c -> c.getCourseId().equals(courseId)).findFirst();
+        Optional<Course> first = DataHolder.courses.stream().filter(c -> c.getCourseId().equals(courseId)).findFirst();
         if (first.isEmpty())
             throw new NoSuchElementException();
         return first.get();

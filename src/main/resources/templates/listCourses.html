@@ -9,12 +9,16 @@
             margin: auto;
         }
     </style>
+    <link href="/main.css" rel="stylesheet"/>
 </head>
 <body>
 <header>
     <h1>Courses List</h1>
 </header>
 <main>
+    <div th:if="${hasError}" class="error">
+        <div th:text="${error}"></div>
+    </div>
     <h2>Choose course:</h2>
     <form th:action="@{/AddStudent}" th:method="GET">
         <div th:each="course: ${courses}"><input type="radio" name="courseId" th:value="${course.getCourseId()}" th:text="${course.getName()}"/>
@@ -22,6 +26,7 @@
         <input type='submit' value='Submit'/>
     </form>
 
+    <a href='/newStudent'>Go to new students</a>
     <br/>
 </main>
 </body>
