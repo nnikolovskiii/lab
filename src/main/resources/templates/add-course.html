@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Add product</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<section class="jumbotron text-center">
+    <div class="container">
+        <h1 class="jumbotron-heading">WEB PROGRAMMING SHOP</h1>
+    </div>
+</section>
+
+<!--private Long id;
+private Long courseId;
+private String name;
+private String description;
+private List<Student> students;
+    private Teacher teacher;-->
+<div class="container">
+    <div class="row">
+        <div class="col-md-5">
+            <form action="/products/add" method="POST">
+                <div class="form-group">
+                    <label for="name">Product name</label>
+                    <input type="text"
+                           class="form-control"
+                           id="name"
+                           name="name"
+                           th:value="(${course} != null ? ${course.getName()} : '')"
+                           required
+                           placeholder="Enter product name">
+                </div>
+                <div class="form-group">
+                    <label for="price">Price</label>
+                    <input type="text"
+                           class="form-control"
+                           id="price"
+                           name="description"
+                           th:value="(${course} != null ? ${course.getDescription()} : '')"
+                           placeholder="Price">
+                </div>
+                <div class="form-group">
+                    <label>Category</label>
+                    <select name="category" class="form-control">
+                        <option th:if="${course} != null"
+                                th:selected="${course.getTeacher() != null && course.getTeacher().getId() == teacher.getId()}"
+                                th:each="teacher : ${teachers}"
+                                th:value="${teacher.getId()}"
+                                th:text="${teacher.getName()}">
+                        </option>
+                        <option th:if="${course} == null"
+                                th:each="teacher : ${teachers}"
+                                th:value="${teacher.getId()}"
+                                th:text="${teacher.getName()}">
+                        </option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+                <a type="button" class="btn btn-primary" href="/products">Back</a>
+            </form>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

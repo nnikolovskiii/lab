@@ -23,6 +23,9 @@
         <div class="row">
             <div class="col-12" th:if="${courses.size() > 0}">
                 <div class="table-responsive">
+                    <form th:action="@{/courses/add-course}" th:method="GET">
+                        <input type="submit" value="Add Course">
+                    </form>
                     <table class="table table-striped">
                         <thead>
                         <tr>
@@ -34,6 +37,7 @@
                         </thead>
                         <tbody>
                         <form th:action="@{/AddStudent}" th:method="GET">
+                            <tr><td><input type='submit' value='Submit'/></td></tr>
                             <tr th:each="course : ${courses}" class="product">
                                 <td><input type="radio" name="courseId" th:value="${course.getCourseId()}"/></td>
                                 <td th:text="${course.getName()}"></td>
@@ -56,16 +60,8 @@
                                             <i class="fa fa-trash">Edit</i>
                                         </a>
                                     </th:block>
-                                    <form th:action="@{'/courses/add-product/{id}' (id=${course.getId()})}"
-                                          th:method="POST">
-                                        <button type="submit"
-                                                class="btn btn-sm btn-primary cart-product">
-                                            <i class="fa fa-trash">Add product to cart</i>
-                                        </button>
-                                    </form>
                                 </td>
                             </tr>
-                            <tr><input type='submit' value='Submit'/></tr>
                         </form>
                         </tbody>
                     </table>

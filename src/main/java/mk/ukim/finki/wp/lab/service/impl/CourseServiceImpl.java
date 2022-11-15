@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 public class CourseServiceImpl implements CourseService {
@@ -34,19 +35,27 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public List<Student> listStudentsByCourse(Long courseId) {
         try {
-            return courseRepository.findAllStudentsByCourse(courseId);
+            return this.findAllStudentsByCourse(courseId);
         }catch (NoSuchElementException exception){
             System.out.println("Course ID "+ courseId+" doesn't exist.");
         }
         return null;
     }
 
+    public List<Student> findAllStudentsByCourse(Long courseId){
+        Optional<Course> course = courseRepository.findById(courseId);
+        return course.map(Course::getStudents).orElse(null);
+    }
+
     @Override
     public Course addStudentInCourse(String username, Long courseId) {
         Student student = studentService.searchByUsername(username);
         //another try catch not the main point
-        Course course = courseRepository.findById(courseId);
-        return courseRepository.addStudentToCourse(student, course);
+        Optional<Course> course = courseRepository.findById(courseId);
+        if (course.isPresent()) {
+            return courseRepository.addStudentToCourse(student, course.get());
+        }
+        return null;
     }
 
     @Override
@@ -55,7 +64,7 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public Course getCourse(Long courseId) {
+    public Optional<Course> getCourse(Long courseId) {
         return courseRepository.findById(Long.valueOf(courseId));
     }
 

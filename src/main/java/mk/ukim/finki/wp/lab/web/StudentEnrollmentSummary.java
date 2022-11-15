@@ -55,7 +55,8 @@ public class StudentEnrollmentSummary extends HttpServlet {
         WebContext context = new WebContext(req, resp, req.getServletContext());
         context.setVariable("students", courseService.listStudentsByCourse(courseId));
         //add a method to the service to get the name of a given courseId
-        context.setVariable("courseName", courseService.getCourse(courseId).getName());
+        //TUKA NEST TREBA DA SMENAM
+        context.setVariable("courseName", courseService.getCourse(courseId).get().getName());
         this.templateEngine.process("studentsInCourse.html", context, resp.getWriter());
     }
 }

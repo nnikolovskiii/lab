@@ -52,5 +52,11 @@ public class DataHolder {
         Teacher t3 = new Teacher("Dimitar", "Trajanov");
         Teacher t4 = new Teacher("Vladimir", "Zdravevski");
         Teacher t5 = new Teacher("Verica", "Bakeva");
+        teachers.add(t1);
+        teachers.add(t2);
+        teachers.add(t3);
+        teachers.add(t4);
+        teachers.add(t5);
+
     }
 }
