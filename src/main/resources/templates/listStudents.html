@@ -1,54 +1,60 @@
 <!DOCTYPE html>
 <html  xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="utf-8">
-    <title>Add new Student to Course</title>
-    <style type = "text/css">
-        body {
-            width: 800px;
-            margin: auto;
-        }
-        table {
-            width:100%;
-        }
-        table, td, th {
-            border: 1px solid black;
-            padding:3px 2px;
-        }
-        section {
-            float: left;
-            margin: 0 1.5%;
-            width: 63%;
-        }
-        aside {
-            float: right;
-            margin: 0 1.5%;
-            width: 30%;
-        }
-    </style>
+    <meta charset="UTF-8"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 </head>
+
 <body>
-<header>
-    <h1>Student Enrollment - Select the Student </h1>
-</header>
-<section>
-    <h2>Select the student to enroll:</h2>
-    <a href='/createStudent' type='button'>Create New Student</a> <br/> <br/>
+<div xmlns:th="http://www.thymeleaf.org">
+    <section class="jumbotron text-center">
+        <div class="container">
+            <h1 class="jumbotron-heading">Student Enrollment</h1>
+            <h3 class="jumbotron-heading">Select the Student</h3>
+        </div>
+    </section>
 
-    <form th:action="@{/StudentEnrollmentSummary}" th:method="POST">
-        <div th:each="student: ${students}"><input type="radio" name="student" th:value="${student.getUsername()}"
-                                                   th:text="${student.getUsername()}"/></div>
-        <input type='submit' value='Submit'/>
-    </form>
+    <div class="container mb-4">
 
-    <!--<input type="radio" name="size" value="petar.petrov"> Петар Петров <br/>
-    <input type="radio" name="size" value="mile.milev"> Миле Милев <br/>
-    <input type="radio" name="size" value="gjorgji.gjorgjiev"> Ѓорѓи Ѓорѓиев <br/>-->
-    <br/>
+        <h2>Select the student to enroll:</h2>
+        <a th:href="@{'/createStudent'}"
+           class="btn btn-secondary"
+           type='button'>Create New Student</a> <br/> <br/>
 
-</section>
+        <form th:action="@{/StudentEnrollmentSummary}" th:method="POST">
+            <div th:each="student: ${students}"><input type="radio" name="student" th:value="${student.getUsername()}"
+                                                       th:text="${student.getUsername()}"/></div>
+
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+
+        <!--<input type="radio" name="size" value="petar.petrov"> Петар Петров <br/>
+        <input type="radio" name="size" value="mile.milev"> Миле Милев <br/>
+        <input type="radio" name="size" value="gjorgji.gjorgjiev"> Ѓорѓи Ѓорѓиев <br/>-->
+        <br/>
+
+        <a th:href="@{'/StudentEnrollmentSummary'}"
+           class="btn btn-info">
+            <i class="fa fa-trash">View course</i>
+        </a>
+        <div>
+        <a th:href="@{'/courses'}"
+           class="btn btn-sm btn-info">
+            <i class="fa fa-trash">Back</i>
+        </a>
+    </div>
+    </div>
+
+
+</div>
 <!--poima nemam za sto e ova-->
-<aside>
+<!--<aside>
     <table>
         <tr>
             <th colspan="2">
@@ -60,7 +66,7 @@
             <td th:text="${courseId}"></td>
         </tr>
     </table>
-</aside>
+</aside>-->
 
 </body>
 </html>

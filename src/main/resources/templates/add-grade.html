@@ -25,44 +25,28 @@ private List<Student> students;
 <div class="container">
     <div class="row">
         <div class="col-md-5">
-            <form action="/courses/add" method="POST">
+            <form th:action="@{/createGrade}" th:method="POST">
                 <div class="form-group">
-                    <label for="name">Course name</label>
+                    <label for="name">Grade</label>
                     <input type="text"
                            class="form-control"
                            id="name"
-                           name="name"
-                           th:value="(${course} != null ? ${course.getName()} : '')"
+                           name="grade"
+                           th:value="(${grade} != null ? ${grade.getGrade()} : '')"
                            required
-                           placeholder="Enter course name">
+                           placeholder="Enter grade"
+                    maxlength="1">
                 </div>
                 <div class="form-group">
-                    <label for="description">Description</label>
-                    <input type="text"
+                    <label for="description">Date and time</label>
+                    <input type="datetime-local"
                            class="form-control"
                            id="description"
-                           name="description"
-                           th:value="(${course} != null ? ${course.getDescription()} : '')"
-                           placeholder="Description">
-                </div>
-                <div class="form-group">
-                    <label>Teacher</label>
-                    <select name="id" class="form-control">
-                        <option th:if="${course} != null"
-                                th:selected="${course.getTeacher() != null && course.getTeacher().getId() == teacher.getId()}"
-                                th:each="teacher : ${teachers}"
-                                th:value="${teacher.getId()}"
-                                th:text="${teacher.getTeacherFullname().getName()}">
-                        </option>
-                        <option th:if="${course} == null"
-                                th:each="teacher : ${teachers}"
-                                th:value="${teacher.getId()}"
-                                th:text="${teacher.getTeacherFullname().getName()} + ' ' + ${teacher.getTeacherFullname().getSurname()}">
-                        </option>
-                    </select>
+                           name="timestamp"
+                           th:value="(${grade} != null ? ${grade.getTimestamp()} : '')">
                 </div>
 
-                <input th:if="${course} != null" type="hidden" th:value="${course.getId()}" name="courseId">
+                <input th:if="${grade} != null" type="hidden" th:value="${grade.getId()}" name="id">
                 <button type="submit" class="btn btn-primary">Submit</button>
                 <a type="button" class="btn btn-primary" href="/courses">Back</a>
             </form>

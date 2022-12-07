@@ -8,28 +8,27 @@ import mk.ukim.finki.wp.lab.model.exceptions.NoNameException;
 import mk.ukim.finki.wp.lab.model.exceptions.NoTeacherFoundException;
 import mk.ukim.finki.wp.lab.repository.CourseRepository;
 import mk.ukim.finki.wp.lab.repository.StudentRepository;
+import mk.ukim.finki.wp.lab.repository.TeacherRepository;
 import mk.ukim.finki.wp.lab.service.CourseService;
-import mk.ukim.finki.wp.lab.service.StudentService;
-import mk.ukim.finki.wp.lab.service.TeacherService;
-import org.apache.tomcat.util.modeler.NoDescriptorRegistry;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import javax.transaction.Transactional;
+import java.util.*;
 
 @Service
+
 public class CourseServiceImpl implements CourseService {
     //dependency injection
-    private CourseRepository courseRepository;
-    private StudentService studentService;
-    private TeacherService teacherService;
+    //gi smeniv site service da se repository
+    private final CourseRepository courseRepository;
+    private final StudentRepository studentRepository;
+    private final TeacherRepository teacherRepository;
 
-    public CourseServiceImpl(CourseRepository courseRepository, StudentService studentService
-    ,TeacherService teacherService) {
+    public CourseServiceImpl(CourseRepository courseRepository, StudentRepository studentRepository, TeacherRepository teacherRepository) {
         this.courseRepository = courseRepository;
-        this.studentService = studentService;
-        this.teacherService = teacherService;
+
+        this.studentRepository = studentRepository;
+        this.teacherRepository = teacherRepository;
     }
 
     @Override
@@ -43,24 +42,32 @@ public class CourseServiceImpl implements CourseService {
     }
 
     public List<Student> findAllStudentsByCourse(Long courseId){
-        Optional<Course> course = courseRepository.findById(courseId);
-        return course.map(Course::getStudents).orElse(null);
+        Course course = courseRepository.findById(courseId).orElseThrow(NoSuchElementException::new);
+        return course.getStudents();
     }
 
     @Override
+    @Transactional
     public Course addStudentInCourse(String username, Long courseId) {
-        Student student = studentService.searchByUsername(username);
-        //another try catch not the main point
-        Optional<Course> course = courseRepository.findById(courseId);
-        if (course.isPresent()) {
-            return courseRepository.addStudentToCourse(student, course.get());
+        //moze ke treba da stavam custom exception
+        Student student = studentRepository.findById(username)
+                .orElseThrow(NoSuchElementException::new);
+
+        Optional<Course> byId = courseRepository.findById(courseId);
+        if (byId.isPresent()) {
+            //dodavam direktno na kursot
+            Course course = byId.get();
+            course.addStudent(student);
+            //go updatenuvam kursot
+            courseRepository.save(course);
         }
+
         return null;
     }
 
     @Override
     public List<Course> listAll() {
-        return courseRepository.findAllCourses();
+        return courseRepository.findAll();
     }
 
     @Override
@@ -69,16 +76,19 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public Course saveCourse(String name, String description, Long id) {
+    public Course saveCourse(Course course,  Long id) {
         //vidi dali se prazni name ili description
-        if(name.isEmpty())
+        //I don't know if this is even needed
+        if(course.getName().isEmpty())
             throw new NoNameException();
-        if(description.isEmpty())
+        if(course.getDescription().isEmpty())
             throw new NoDescriptionException();
-        //vidi dali go ima toj profesor
-        Teacher teacher = teacherService.findById(id).orElseThrow(() -> new NoTeacherFoundException(id));
 
-        return courseRepository.save(name, description, teacher);
+        //vidi dali go ima toj profesor
+        Teacher teacher = teacherRepository.findById(id).orElseThrow(() -> new NoTeacherFoundException(id));
+        course.setTeacher(teacher);
+
+        return courseRepository.save(course);
     }
 
     @Override

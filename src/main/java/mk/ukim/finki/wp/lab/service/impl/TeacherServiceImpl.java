@@ -1,10 +1,13 @@
 package mk.ukim.finki.wp.lab.service.impl;
 
 import mk.ukim.finki.wp.lab.model.Teacher;
+import mk.ukim.finki.wp.lab.model.TeacherFullname;
 import mk.ukim.finki.wp.lab.repository.TeacherRepository;
+import mk.ukim.finki.wp.lab.repository.impl.InMemoryTeacherRepository;
 import mk.ukim.finki.wp.lab.service.TeacherService;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,5 +28,14 @@ public class TeacherServiceImpl implements TeacherService {
     public Optional<Teacher> findById(Long id) {
         return teacherRepository.findById(id);
     }
+
+    @Override
+    public Teacher addTeacher(String name, String surname, LocalDate dayOfEmployment) {
+        Teacher teacher = new Teacher();
+        teacher.setTeacherFullname(new TeacherFullname(name, surname));
+        teacher.setDateOfEmployment(dayOfEmployment);
+        return teacherRepository.save(teacher);
+    }
+
 
 }

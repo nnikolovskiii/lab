@@ -20,12 +20,11 @@ public class MyFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
 
-        Course course = (Course)request.getSession().getAttribute("chosenCourse");
-
+        Course course = (Course)request.getSession().getAttribute("course");
         String path = request.getServletPath();
 
         ///courses/add
-        if (!"/courses/add".equals(path) && !"/courses/add-course".equals(path) && !"/AddStudent".equals(path) &&!"/courses".equals(path) && !"/main.css".equals(path) && course==null) {
+        if (course == null && !"/favicon.ico".equals(path) && !"/createTeacher".equals(path) &&!"/AddStudent".equals(path) &&!path.contains("/courses") && !"/main.css".equals(path)) {
             response.sendRedirect("/courses?error=CourseNotSelected");
         } else {
             filterChain.doFilter(servletRequest,servletResponse);

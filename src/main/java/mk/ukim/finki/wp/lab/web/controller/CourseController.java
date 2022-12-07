@@ -8,7 +8,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping(value = { "/courses"})
@@ -22,14 +25,25 @@ public class CourseController {
     }
 
     @GetMapping
-    public String getCoursesPage(@RequestParam(required = false) String error, Model model){
+    public String getCoursesPage(@RequestParam(required = false) String error,
+                                 @RequestParam(required = false) Long id,
+                                 Model model){
         if(error != null && !error.isEmpty()) {
             model.addAttribute("hasError", true);
             model.addAttribute("error", error);
         }
 
+        if (id != null){
+            Optional<Teacher> teacher = teacherService.findById(id);
+            teacher.ifPresent(value -> model.addAttribute("teacher", value));
+
+        }
+
+        List<Teacher> teachers = teacherService.findAll();
+        model.addAttribute("teachers", teachers);
         List<Course> courses = courseService.listAll();
-        model.addAttribute("courses", courseService.listAll());
+        courses = courses.stream().sorted(Comparator.comparing(Course::getName)).collect(Collectors.toList());
+        model.addAttribute("courses", courses);
         return "listCourses";
     }
 
@@ -38,21 +52,28 @@ public class CourseController {
     public String saveNewCourse(@RequestParam String name,
                              @RequestParam String description,
                              @RequestParam Long id){
+
+
+        //the id will be added when it will be created
+        Course course = new Course(name, description);
         try {
-            courseService.saveCourse(name, description, id);
+            courseService.saveCourse(course, id);
         }catch (RuntimeException exception){
             return "redirect:/courses?error=" + exception.getMessage();
         }
+
+
+
         return "redirect:/courses";
     }
-
-    @DeleteMapping("/delete/{id}")
+    //http://localhost:8080/AddStudent?_method=DELETE
+    @GetMapping("/delete/{id}")
     public String deleteCourse(@PathVariable Long id){
         this.courseService.deleteById(id);
         return "redirect:/courses";
     }
 
-    @GetMapping("/courses/edit-form/{id}")
+    @GetMapping("/edit-form/{id}")
     public String getEditCoursePage(@PathVariable Long id, Model model){
         if(this.courseService.getCourse(id).isPresent()){
             Course course = this.courseService.getCourse(id).get();
@@ -73,12 +94,24 @@ public class CourseController {
     }
 
 
+    //courseId to check if we clicked the edited button
     @PostMapping("/add")
-    public String saveCourse(@RequestParam String name,
+    public String saveCourse(@RequestParam(required = false) Long courseId,
+                             @RequestParam String name,
                              @RequestParam String description,
-                             @RequestParam Long id){
+                             @RequestParam Long id)
+    {
+
         try {
-            courseService.saveCourse(name,description,id);
+            Course course = null;
+            if (courseId == null)
+                course = new Course(name,description);
+            else {
+                course = courseService.getCourse(courseId).get();
+                course.setName(name);
+                course.setDescription(description);
+            }
+            courseService.saveCourse(course ,id);
         }catch (RuntimeException exception)
         {
             return "redirect:/courses?error=" + exception.getMessage();

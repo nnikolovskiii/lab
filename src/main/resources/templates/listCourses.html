@@ -1,4 +1,6 @@
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -11,58 +13,89 @@
 <div xmlns:th="http://www.thymeleaf.org">
     <section class="jumbotron text-center">
         <div class="container">
-            <h1 class="jumbotron-heading">WEB PROGRAMMING SHOP</h1>
-            <h3 class="jumbotron-heading">All products</h3>
+            <h1 class="jumbotron-heading">COURSES</h1>
+            <h3 class="jumbotron-heading">All courses</h3>
         </div>
     </section>
 
     <div class="container mb-4">
-        <div>
+
+
+        <form th:action="@{/courses/add-course}" th:method="GET">
+            <input type="submit" value="Add Course">
+        </form>
+        <form th:action="@{/createTeacher}" th:method="GET">
+            <input type="submit" value="Add teacher">
+        </form>
+    </form>
+    </div>
+
+    <div class="container mb-4">
+       <!-- <form th:action="@{/courses}" th:method="GET">
+            <div class="form-group">
+                <label>Teacher</label>
+                <select name="id" class="form-control">
+                    <option
+                            th:each="teacher : ${teachers}"
+                            th:value="${teacher.getId()}"
+                            th:text="${teacher.getName()} + ' ' + ${teacher.getSurname()}">
+                    </option>
+                </select>
+            </div>
+            <input type="submit" value="Select Teacher">
+        </form>-->
+        <!--<div>
             <a href='/newStudent'>Go to new students</a>
-        </div>
+        </div>-->
         <div class="row">
             <div class="col-12" th:if="${courses.size() > 0}">
                 <div class="table-responsive">
-                    <form th:action="@{/courses/add-course}" th:method="GET">
-                        <input type="submit" value="Add Course">
-                    </form>
-                    <table class="table table-striped">
-                        <thead>
-                        <tr>
-                            <th scope="col">Course name</th>
-                            <th scope="col">Description</th>
-                            <th scope="col">Teacher</th>
-                            <th scope="col">Selection</th>
-                        </tr>
-                        </thead>
-                        <tbody>
+
                         <form th:action="@{/AddStudent}" th:method="GET">
                             <tr><td><input type='submit' value='Submit'/></td></tr>
-                            <tr th:each="course : ${courses}" class="product">
-                                <td><input type="radio" name="courseId" th:value="${course.getCourseId()}"/></td>
-                                <td th:text="${course.getName()}"></td>
-                                <td th:text="${course.getDescription()}"></td>
-                                <td th:text="${course.getTeacher() != null}
-                                ? ${course.getTeacher().getName()} : 'No Teacher'"></td>
-                                <td class="text-right">
-                                    <th:block>
-                                        <form th:action="@{'/courses/delete/{id}' (id=${course.getId()})}"
-                                              th:method="DELETE">
-                                            <button type="submit"
-                                                    class="btn btn-sm btn-danger delete-product">
-                                                <i class="fa fa-trash">Delete</i>
-                                            </button>
-                                        </form>
-                                    </th:block>
-                                    <th:block>
-                                        <a th:href="@{'/courses/edit-form/{id}' (id=${course.getId()})}"
-                                           class="btn btn-sm btn-info edit-product">
-                                            <i class="fa fa-trash">Edit</i>
-                                        </a>
-                                    </th:block>
-                                </td>
-                            </tr>
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th scope="col">Selection</th>
+                                    <th scope="col">Course name</th>
+                                    <th scope="col">Description</th>
+                                    <th scope="col">Teacher</th>
+                                    <th scope="col">Choose Action</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="course : ${courses}" class="product">
+                                        <td><input type="radio" name="courseId" th:value="${course.getId()}"/></td>
+                                        <td th:if="${teacher} != null and ${course.hasTeacher(teacher)}"
+                                            style="color:blue;"
+                                            th:text="${course.getName()}"></td>
+                                        <td th:if="${teacher} != null and !${course.hasTeacher(teacher)}" th:text="${course.getName()}"></td>
+                                        <td th:if="${teacher} == null" th:text="${course.getName()}"></td>
+                                        <td th:text="${course.getDescription()}"></td>
+                                        <td th:text="${course.getTeacher() != null}
+                                        ? ${course.getTeacher().getTeacherFullname()}: 'No Teacher'"></td>
+                                        <td class="text-right">
+                                            <!--http://localhost:8080/AddStudent?_method=DELETE-->
+                                            <th:block>
+                                                <a th:href="@{'/courses/delete/{id}' (id=${course.getId ()})}"
+                                                   class="btn btn-sm btn-danger delete-product">
+                                                    <i class="fa fa-trash">Delete</i>
+                                                </a>
+                                            </th:block>
+                                            <th:block>
+                                                <a th:href="@{'/courses/edit-form/{id}' (id=${course.getId()})}"
+                                                   class="btn btn-sm btn-info edit-product">
+                                                    <i class="fa fa-trash">Edit</i>
+                                                </a>
+                                            </th:block>
+                                        </td>
+
+                                    </tr>
+                                </tbody>
+                            </table>
+
                         </form>
+
                         </tbody>
                     </table>
                 </div>

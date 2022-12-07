@@ -1,18 +1,19 @@
 package mk.ukim.finki.wp.lab.service.impl;
 
 import mk.ukim.finki.wp.lab.model.Student;
-import mk.ukim.finki.wp.lab.repository.CourseRepository;
 import mk.ukim.finki.wp.lab.repository.StudentRepository;
+import mk.ukim.finki.wp.lab.repository.impl.InMemoryStudentRepository;
 import mk.ukim.finki.wp.lab.service.StudentService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 public class StudentServiceImpl implements StudentService {
     //dependencies
-    private StudentRepository studentRepository;
+    private final StudentRepository studentRepository;
 
 
     public StudentServiceImpl(StudentRepository studentRepository) {
@@ -21,12 +22,12 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public List<Student> listAll() {
-        return studentRepository.findAllStudents();
+        return studentRepository.findAll();
     }
 
     @Override
     public List<Student> searchByNameOrSurname(String text) {
-        return studentRepository.findAllByNameOrSurname(text);
+        return studentRepository.findAllByNameOrSurname(text, text);
     }
 
     @Override
@@ -42,11 +43,9 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public Student searchByUsername(String username) {
-        try {
-            return studentRepository.findByUsername(username);
-        }catch (NoSuchElementException e){
-            System.out.println("No such element");
-        }
-        return null;
+        //vaka moze da se handle-ne Optional
+        return studentRepository.findById(username)
+                .orElseThrow(NoSuchElementException::new);
+
     }
 }
