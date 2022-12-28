@@ -71,4 +71,16 @@ public class GradeServiceImpl implements GradeService {
         gradeRepository.save(gradeObj);
     }
 
+    @Override
+    public Character getGradeForStudent(Student s) {
+        return null;
+    }
+
+    @Override
+    public List<Student> findByGradeBetween(String from1, String to1) {
+        return null;
+    }
+
+
+
 }

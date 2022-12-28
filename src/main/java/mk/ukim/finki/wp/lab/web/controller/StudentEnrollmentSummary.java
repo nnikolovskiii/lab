@@ -1,5 +1,6 @@
 package mk.ukim.finki.wp.lab.web.controller;
 
+import mk.ukim.finki.wp.lab.model.Course;
 import mk.ukim.finki.wp.lab.model.Grade;
 import mk.ukim.finki.wp.lab.model.Student;
 import mk.ukim.finki.wp.lab.service.CourseService;
@@ -52,7 +53,8 @@ public class StudentEnrollmentSummary extends HttpServlet {
 
         settingUpModel(model, courseId);
 
-        return "studentsInCourse.html";
+        model.addAttribute("bodyContent", "studentsInCourse");
+        return "master-template";
     }
 
     @PostMapping
@@ -80,11 +82,14 @@ public class StudentEnrollmentSummary extends HttpServlet {
                          Model model,
                          HttpServletRequest req){
         long courseId = (long) req.getSession().getAttribute("chosenCourse");
-        settingUpModel(model, courseId);
-
+        Course course = (Course) req.getSession().getAttribute("course");
+        List<Student> students = (List<Student>) model.getAttribute("students");
+        if (students==null) {
+            settingUpModel(model, courseId);
+            students = (List<Student>) model.getAttribute("students");
+        }
         if (from != null && to!=null){
             Map<String, Grade> grades = (Map<String, Grade>) model.getAttribute("grades");
-            List<Student> students = (List<Student>) model.getAttribute("students");
             List<Student> collect = students.stream().filter(s -> {
                 if (grades.containsKey(s.getUsername())) {
                     Grade grade = grades.get(s.getUsername());
@@ -97,6 +102,40 @@ public class StudentEnrollmentSummary extends HttpServlet {
         }
         model.addAttribute("from", from);
         model.addAttribute("to", to);
+        return "studentsInCourse.html";
+    }
+
+    @PostMapping("/lol1")
+    public String filter(@RequestParam(required = false)
+                                 String from1,
+                         @RequestParam(required = false)
+                                 String to1,
+                         Model model,
+                         HttpServletRequest req){
+        long courseId = (long) req.getSession().getAttribute("chosenCourse");
+        Course course = (Course) req.getSession().getAttribute("course");
+        List<Student> students = (List<Student>) model.getAttribute("students");
+        if (students==null) {
+            settingUpModel(model, courseId);
+            students = (List<Student>) model.getAttribute("students");
+        }
+
+        if (to1.length() == 1 && from1.length() == 1){
+            Map<String, Grade> grades = (Map<String, Grade>) model.getAttribute("grades");
+            String finalFrom = from1;
+            String finalTo = to1;
+            gradeService.findByGradeBetween(from1, to1);
+            List<Student> collect = students.stream().filter(s -> {
+                                return false;
+            }).collect(Collectors.toList());
+            model.addAttribute("students", collect);
+
+        }else{
+            from1="Pogreshno vneseno: Vnesi povtorno";
+            to1 = "Pogreshno vneseno: Vnesi povtorno";
+        }
+        model.addAttribute("from1", from1);
+        model.addAttribute("to1", to1);
         return "studentsInCourse.html";
     }
 }

@@ -46,6 +46,7 @@ public class ListStudentController extends HttpServlet {
         Optional<Course> course = coursesService.getCourse(id);
         course.ifPresent(value -> req.getSession().setAttribute("course", value));
 
-        return "listStudents.html";
+        model.addAttribute("bodyContent", "listStudents");
+        return "master-template";
     }
 }

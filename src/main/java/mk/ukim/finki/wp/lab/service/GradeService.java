@@ -20,4 +20,8 @@ public interface GradeService {
     Optional<Grade> getGrade(Long id);
 
     void save(Long id, String grade, LocalDateTime timestamp);
+
+    Character getGradeForStudent(Student s);
+
+    List<Student> findByGradeBetween(String from1, String to1);
 }

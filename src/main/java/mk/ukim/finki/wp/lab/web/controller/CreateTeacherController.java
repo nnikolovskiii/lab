@@ -4,6 +4,7 @@ import mk.ukim.finki.wp.lab.model.Teacher;
 import mk.ukim.finki.wp.lab.service.TeacherService;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,8 +22,9 @@ public class CreateTeacherController {
     }
 
     @GetMapping
-    public String getCreateTeacherSite(){
-        return "add-teacher";
+    public String getCreateTeacherSite(Model model){
+        model.addAttribute("bodyContent", "add-teacher");
+        return "master-template";
     }
 
     @PostMapping

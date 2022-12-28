@@ -4,6 +4,7 @@ import mk.ukim.finki.wp.lab.model.Course;
 import mk.ukim.finki.wp.lab.model.Teacher;
 import mk.ukim.finki.wp.lab.service.CourseService;
 import mk.ukim.finki.wp.lab.service.TeacherService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -44,7 +45,8 @@ public class CourseController {
         List<Course> courses = courseService.listAll();
         courses = courses.stream().sorted(Comparator.comparing(Course::getName)).collect(Collectors.toList());
         model.addAttribute("courses", courses);
-        return "listCourses";
+        model.addAttribute("bodyContent", "listCourses");
+        return "master-template";
     }
 
     //името, описот за курсот, како и id на професорот кој е одговорен за тој курс
@@ -87,10 +89,12 @@ public class CourseController {
     }
 
     @GetMapping("/add-course")
+    @PreAuthorize("hasRole('ADMIN')")
     public String getAddCoursePage(Model model){
         List<Teacher> teachers = this.teacherService.findAll();
         model.addAttribute("teachers", teachers);
-        return "add-course";
+        model.addAttribute("bodyContent", "add-course");
+        return "master-template";
     }
 
 

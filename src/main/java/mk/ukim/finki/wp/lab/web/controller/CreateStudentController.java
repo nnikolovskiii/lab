@@ -20,7 +20,7 @@ public class CreateStudentController {
     }
 
     @GetMapping
-    protected void getCreateStudentPage(Model model){
+    protected String getCreateStudentPage(Model model){
         Boolean addStudent = (Boolean) model.getAttribute("addStudent");
         //init
         if (addStudent == null) {
@@ -32,7 +32,8 @@ public class CreateStudentController {
             //change values, ako e T -> F, ako e F -> T
             addStudent = !addStudent;
 
-        model.addAttribute("addStudent", true);
+        model.addAttribute("bodyContent", "createStudent");
+        return "master-template";
     }
 
     @PostMapping

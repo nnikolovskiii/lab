@@ -34,7 +34,8 @@ public class CreateGradeController {
 
         req.getSession().setAttribute("student", studentId);
 /*        model.addAttribute("grade", grade);*/
-        return "add-grade";
+        model.addAttribute("bodyContent", "add-grade");
+        return "master-template";
     }
 
     @GetMapping("/delete/{id}")

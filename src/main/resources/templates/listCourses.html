@@ -1,58 +1,29 @@
-<html lang="en"
-      xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8"/>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-</head>
+<div class="container mb-4" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+    <div class="container mb-4">
+
+        <div class="container mb-4">
 
 
-<div xmlns:th="http://www.thymeleaf.org">
-    <section class="jumbotron text-center">
-        <div class="container">
-            <h1 class="jumbotron-heading">COURSES</h1>
-            <h3 class="jumbotron-heading">All courses</h3>
+            <th:block sec:authorize="hasRole('ROLE_ADMIN')">
+            <form th:action="@{/courses/add-course}" th:method="GET">
+                <input class="add-course-btn" type="submit" value="Add Course">
+            </form>
+            </th:block>
+            <th:block sec:authorize="hasRole('ROLE_ADMIN')">
+            <form th:action="@{/createTeacher}" th:method="GET">
+                <input class="add-teacher-btn" type="submit" value="Add teacher">
+            </form>
+            </th:block>
+
         </div>
-    </section>
-
-    <div class="container mb-4">
 
 
-        <form th:action="@{/courses/add-course}" th:method="GET">
-            <input type="submit" value="Add Course">
-        </form>
-        <form th:action="@{/createTeacher}" th:method="GET">
-            <input type="submit" value="Add teacher">
-        </form>
-    </form>
-    </div>
-
-    <div class="container mb-4">
-       <!-- <form th:action="@{/courses}" th:method="GET">
-            <div class="form-group">
-                <label>Teacher</label>
-                <select name="id" class="form-control">
-                    <option
-                            th:each="teacher : ${teachers}"
-                            th:value="${teacher.getId()}"
-                            th:text="${teacher.getName()} + ' ' + ${teacher.getSurname()}">
-                    </option>
-                </select>
-            </div>
-            <input type="submit" value="Select Teacher">
-        </form>-->
-        <!--<div>
-            <a href='/newStudent'>Go to new students</a>
-        </div>-->
         <div class="row">
             <div class="col-12" th:if="${courses.size() > 0}">
                 <div class="table-responsive">
 
                         <form th:action="@{/AddStudent}" th:method="GET">
-                            <tr><td><input type='submit' value='Submit'/></td></tr>
+                            <input type='submit' value='Submit'/>
                             <table class="table table-striped">
                                 <thead>
                                 <tr>
@@ -60,11 +31,13 @@
                                     <th scope="col">Course name</th>
                                     <th scope="col">Description</th>
                                     <th scope="col">Teacher</th>
+                                    <th:block sec:authorize="hasRole('ROLE_ADMIN')">
                                     <th scope="col">Choose Action</th>
+                                    </th:block>>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                    <tr th:each="course : ${courses}" class="product">
+                                    <tr th:each="course : ${courses}" class="courses">
                                         <td><input type="radio" name="courseId" th:value="${course.getId()}"/></td>
                                         <td th:if="${teacher} != null and ${course.hasTeacher(teacher)}"
                                             style="color:blue;"
@@ -74,21 +47,24 @@
                                         <td th:text="${course.getDescription()}"></td>
                                         <td th:text="${course.getTeacher() != null}
                                         ? ${course.getTeacher().getTeacherFullname()}: 'No Teacher'"></td>
+                                        <th:block sec:authorize="hasRole('ROLE_ADMIN')"
+                                                       >
                                         <td class="text-right">
                                             <!--http://localhost:8080/AddStudent?_method=DELETE-->
                                             <th:block>
                                                 <a th:href="@{'/courses/delete/{id}' (id=${course.getId ()})}"
-                                                   class="btn btn-sm btn-danger delete-product">
+                                                   class="btn btn-sm btn-danger delete-course">
                                                     <i class="fa fa-trash">Delete</i>
                                                 </a>
                                             </th:block>
                                             <th:block>
                                                 <a th:href="@{'/courses/edit-form/{id}' (id=${course.getId()})}"
-                                                   class="btn btn-sm btn-info edit-product">
+                                                   class="btn btn-sm btn-info edit-course">
                                                     <i class="fa fa-trash">Edit</i>
                                                 </a>
                                             </th:block>
                                         </td>
+                                        </th:block>
 
                                     </tr>
                                 </tbody>
@@ -103,39 +79,3 @@
         </div>
     </div>
 </div>
-
-
-<!--
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="utf-8">
-    <title>Welcome and Choose a Course</title>
-    <style>
-        body {
-            width: 800px;
-            margin: auto;
-        }
-    </style>
-    <link href="/main.css" rel="stylesheet"/>
-</head>
-<body>
-<header>
-    <h1>Courses List</h1>
-</header>
-<main>
-    <div th:if="${hasError}" class="error">
-        <div th:text="${error}"></div>
-    </div>
-    <h2>Choose course:</h2>
-    <form th:action="@{/AddStudent}" th:method="GET">
-        <div th:each="course: ${courses}"><input type="radio" name="courseId" th:value="${course.getCourseId()}" th:text="${course.getName()}"/>
-        (<th:block th:text="${course.getDescription()}"/>)</div>
-        <input type='submit' value='Submit'/>
-    </form>
-
-    <a href='/newStudent'>Go to new students</a>
-    <br/>
-</main>
-</body>
-</html>-->
